@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="sentences">
+        <item>@string/input_sentence</item>
+        <item>@string/sentence1</item>
+        <item>@string/sentence2</item>
+        <item>@string/sentence3</item>
+        <item>@string/sentence4</item>
+        <item>@string/sentence5</item>
+        <item>@string/sentence6</item>
+        <item>@string/sentence7</item>
+        <item>@string/sentence8</item>
+        <item>@string/sentence9</item>
+        <item>@string/sentence10</item>
+        <item>@string/sentence11</item>
+        <item>@string/sentence12</item>
+        <item>@string/sentence13</item>
+        <item>@string/sentence14</item>
+    </string-array>
+</resources>

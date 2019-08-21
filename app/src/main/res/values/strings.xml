@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">Translation Dummy MF</string>
+
+    <string name="sentence1">Hello</string>
+    <string name="sentence2">"I don't speak French"</string>
+    <string name="sentence3">My umbrella is in the kitchen</string>
+    <string name="sentence4">Can I have a coffee? Or two?</string>
+    <string name="sentence5">Kotlin is great!</string>
+    <string name="sentence6">Where is nature?</string>
+    <string name="sentence7">What is nature?</string>
+    <string name="sentence8">"It's too hot!"</string>
+    <string name="sentence9">I am cold</string>
+    <string name="sentence10">Where can I eat?</string>
+    <string name="sentence11">Do you have cakes?</string>
+    <string name="sentence12">The cake is a lie</string>
+    <string name="sentence13">Can I read the latest Garfield?</string>
+    <string name="sentence14">I am looking for a job</string>
+
+    <string name="input_sentence">Enter my own</string>
+
+    <string name="test">Test <b>bold</b></string>
+    <string name="select_ac_dialog_translate_title">Result</string>
+    <string name="select_ac_dialog_translate_message">Translating \"%1$s\"\n\nIn %2$s, you should say:\n\"%3$s\"</string>
+    <string name="select_ac_dialog_translate_positive_button">Thank you</string>
+
 </resources>
