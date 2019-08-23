@@ -4,9 +4,11 @@ import androidx.test.espresso.Espresso.onData
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
+import androidx.test.espresso.intent.Intents.intended
+import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
+import androidx.test.espresso.intent.rule.IntentsTestRule
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.faust.m.td.R
 import org.hamcrest.CoreMatchers.anything
@@ -18,8 +20,7 @@ import org.junit.runner.RunWith
 class SelectActivityTest {
 
     @get:Rule
-    var activityRule: ActivityTestRule<SelectActivity> = ActivityTestRule(SelectActivity::class.java)
-
+    val intentsTestRule = IntentsTestRule(SelectActivity::class.java)
 
     @Test
     fun clickAnyNonFirstItemOnListShouldDisplayDialogWithCorrectTitle() {
@@ -37,5 +38,13 @@ class SelectActivityTest {
             .inAdapterView(withId(R.id.selectListViewSentences))
             .atPosition(pPosition)
             .perform(click())
+    }
+
+    @Test
+    fun clickFirstItemOnListShouldSendIntentStartActivityInput() {
+        clickItemOnListAtPosition(0)
+
+        // Assert that activity input has been started
+        intended(hasComponent(InputActivity::class.java.name))
     }
 }
