@@ -6,9 +6,10 @@
         android:layout_height="match_parent"
         tools:context=".activities.SelectActivity">
 
-    <ListView
-            android:id="@+id/selectListViewSentences"
+    <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewTranslation"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

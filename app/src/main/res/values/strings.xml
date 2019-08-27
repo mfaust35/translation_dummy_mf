@@ -21,6 +21,8 @@
     <string name="select_ac_dialog_translate_title">Result</string>
     <string name="select_ac_dialog_translate_message">Translating \"%1$s\"\n\nIn %2$s, you should say:\n\"%3$s\"</string>
     <string name="select_ac_dialog_translate_positive_button">Thank you</string>
+    <string name="select_ac_recycler_view_translation_no_highlight">"?"</string>
+    <string name="select_ac_recycler_view_translation_no_sentence">error</string>
 
     <string name="input_hint_sentence_to_translate">Sentence to translate</string>
     <string name="input_translate">Translate</string>
