@@ -9,11 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import com.faust.m.td.R
 import com.faust.m.td.alertTranslation
 import kotlinx.android.synthetic.main.activity_input.*
-import mu.KotlinLogging
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.info
 
-class InputActivity: AppCompatActivity() {
-
-    private val logger = KotlinLogging.logger {}
+class InputActivity: AppCompatActivity(), AnkoLogger {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +22,7 @@ class InputActivity: AppCompatActivity() {
             var handled = false
             if (isActionDone(actionId) || isEnterKeyDownEvent(keyEvent)) {
                 val sentence = textView.text.toString()
-                logger.info { "sentence = \"$sentence\"" }
+                info { "sentence = \"$sentence\"" }
                 alertTranslation(sentence)
                 clearWindowForAlert()
                 handled = true
