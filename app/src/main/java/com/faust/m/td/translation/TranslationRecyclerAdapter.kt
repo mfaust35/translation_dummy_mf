@@ -1,15 +1,18 @@
-package com.faust.m.td
+package com.faust.m.td.translation
 
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.faust.m.td.R
+import com.faust.m.td.inflate
 import org.jetbrains.anko.find
 
-class RecyclerAdapterTranslation(values: Collection<String>) :
-     RecyclerView.Adapter<RecyclerAdapterTranslation.TranslationHolder>() {
+class TranslationRecyclerAdapter(translations: Collection<String>? = null) :
+     RecyclerView.Adapter<TranslationRecyclerAdapter.TranslationHolder>() {
 
-    private val mTranslations: MutableList<String> = ArrayList(values)
+    private val mTranslations: MutableList<String> =
+        if (translations.isNullOrEmpty()) mutableListOf() else ArrayList(translations)
     var onItemClickListener: ((tSentence: String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TranslationHolder {
@@ -24,6 +27,17 @@ class RecyclerAdapterTranslation(values: Collection<String>) :
     override fun onBindViewHolder(holder: TranslationHolder, position: Int) {
         val translation = mTranslations[position]
         holder.bindTranslation(translation)
+    }
+
+    fun addAll(sentences: Collection<String>) {
+        // TODO : I don't believe I can modify the list just like that
+        // What happens in case the UI thread is currently trying to display the list?
+        this.mTranslations.addAll(sentences)
+    }
+
+    fun clear() {
+        // TODO : cf TODO on addAll() method
+        mTranslations.clear()
     }
 
     inner class TranslationHolder(private val view: View): RecyclerView.ViewHolder(view) {

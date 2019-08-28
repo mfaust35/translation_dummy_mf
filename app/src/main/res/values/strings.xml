@@ -27,6 +27,7 @@
     <string name="input_hint_sentence_to_translate">Sentence to translate</string>
     <string name="input_translate">Translate</string>
     <string name="input_cancel">Cancel</string>
+    <string name="input_add_translation">Add</string>
 
     <string name="unknown_translation1">I do not understand this particular sentence</string>
     <string name="unknown_translation2">Are you sure this is a proper english sentence?</string>

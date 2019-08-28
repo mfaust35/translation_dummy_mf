@@ -11,7 +11,7 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.runner.AndroidJUnit4
 import com.faust.m.td.R
-import com.faust.m.td.RecyclerAdapterTranslation
+import com.faust.m.td.translation.TranslationRecyclerAdapter
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -22,6 +22,9 @@ class SelectActivityTest {
     @get:Rule
     val intentsTestRule = IntentsTestRule(SelectActivity::class.java)
 
+    // TODO : these tests are leaking dialog window. I don't know why
+    // try replacing showDialog by a dialogFragment ??
+    // https://stackoverflow.com/questions/9059116/activity-has-leaked-window-dialog-this-again
     @Test
     fun clickAnyNonFirstItemOnListShouldDisplayDialogWithCorrectTitle() {
         clickItemOnListAtPosition(2)
@@ -32,11 +35,10 @@ class SelectActivityTest {
             .inRoot(isDialog())
             .check(matches(isDisplayed()))
     }
-
     private fun clickItemOnListAtPosition(pPosition: Int) {
         // Click on the RecyclerView item at position 2
         onView(withId(R.id.recyclerViewTranslation))
-            .perform(actionOnItemAtPosition<RecyclerAdapterTranslation.TranslationHolder>(pPosition, click()))
+            .perform(actionOnItemAtPosition<TranslationRecyclerAdapter.TranslationHolder>(pPosition, click()))
     }
 
     @Test
