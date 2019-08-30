@@ -5,9 +5,8 @@ import androidx.room.RoomDatabase
 import com.faust.m.td.translation.Translation
 import com.faust.m.td.translation.TranslationDao
 
-
 @Database(
-    entities = arrayOf(Translation::class),
+    entities = [Translation::class],
     version = 1)
 abstract class TranslationDatabase : RoomDatabase() {
     abstract fun translationDao(): TranslationDao

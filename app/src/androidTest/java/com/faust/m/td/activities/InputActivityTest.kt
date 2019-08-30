@@ -4,19 +4,31 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.rule.ActivityTestRule
 import androidx.test.runner.AndroidJUnit4
 import com.faust.m.td.R
+import com.faust.m.td.koin.KoinActivityTestRule
+import com.faust.m.td.translation.TranslationDao
+import com.nhaarman.mockitokotlin2.*
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.koin.dsl.module
+import org.koin.test.KoinTest
+import org.mockito.Mockito.mock
 import kotlin.test.assertTrue
 
 @RunWith(AndroidJUnit4::class)
-class InputActivityTest {
+class InputActivityTest : KoinTest {
+
+    // Apparently, this  mock is being recreated for each test, so there should be no problems
+    // of tests influencing each other. Check why / who is recreating mock instances
+    private var translationDao: TranslationDao = mock(TranslationDao::class.java)
 
     @get:Rule
-    val activityTestRule = ActivityTestRule(InputActivity::class.java)
+    var activityTestRule = KoinActivityTestRule(
+        InputActivity::class.java,
+        module { single { translationDao  } }
+    )
 
     @Test
     fun clickOnButtonCancelShouldFinishActivity() {
@@ -26,12 +38,22 @@ class InputActivityTest {
     }
 
     @Test
-    fun clickOnButtonAddShouldInsertTranslationIntoDao() {
-        onView(withId(R.id.sentence_edit_text)).perform(replaceText("That!"))
-        onView(withId(R.id.add_button)).perform(click())
+    fun clickOnButtonAddShouldFinishActivity() {
+        clickOnButtonAddAfterInputSentence("That")
 
-        // TODO: In order to test insertion into dao, I need to get a mock translationDao
-        // For that, I need to use injection dependencies I suppose
         assertTrue(activityTestRule.activity.isFinishing)
+    }
+    private fun clickOnButtonAddAfterInputSentence(sentence: String) {
+        doNothing().whenever(translationDao).insertAll(any())
+
+        onView(withId(R.id.sentence_edit_text)).perform(replaceText(sentence))
+        onView(withId(R.id.add_button)).perform(click())
+    }
+
+    @Test
+    fun clickOnButtonAddShouldInsertTranslationIntoDao() {
+        clickOnButtonAddAfterInputSentence("That")
+
+        verify(translationDao).insertAll(argThat { english == "That" })
     }
 }
