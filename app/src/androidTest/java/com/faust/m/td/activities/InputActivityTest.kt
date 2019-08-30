@@ -9,22 +9,21 @@ import com.faust.m.td.DEFAULT_USER_ID
 import com.faust.m.td.R
 import com.faust.m.td.data.TranslationDataSource
 import com.faust.m.td.domain.Translation
-import com.nhaarman.mockitokotlin2.*
-import org.assertj.core.api.Assertions.assertThat
-import org.junit.Assert.assertTrue
+import io.mockk.*
+import junit.framework.Assert.assertTrue
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.dsl.module
 import org.koin.test.KoinTest
-import org.mockito.Mockito.mock
+
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class InputActivityTest : KoinTest {
 
     // Apparently, this  mock is being recreated for each test, so there should be no problems
     // of tests influencing each other. Check why / who is recreating mock instances
-    private var translationDS: TranslationDataSource = mock(TranslationDataSource::class.java)
+    private var translationDS: TranslationDataSource = mockk()
 
     @get:Rule
     var activityTestRule = KoinActivityTestRule(
@@ -46,7 +45,7 @@ class InputActivityTest : KoinTest {
         assertTrue(activityTestRule.activity.isFinishing)
     }
     private fun clickOnButtonAddAfterInputSentence(sentence: String) {
-        doNothing().whenever(translationDS).addTranslation(any())
+        every { translationDS.addTranslation(any()) } just Runs
 
         onView(withId(R.id.sentence_edit_text)).perform(replaceText(sentence))
         onView(withId(R.id.add_translation_button)).perform(click())
@@ -57,15 +56,10 @@ class InputActivityTest : KoinTest {
     fun clickOnButtonAddShouldInsertTranslationIntoDao() {
         // Given sentence_edit_text contain text "That"
         // When click on button add
-        clickOnButtonAddAfterInputSentence("That")
+        clickOnButtonAddAfterInputSentence("This")
 
         // Then translationDS insert a new translation with correct attributes
-        argumentCaptor<Translation>().apply {
-            verify(translationDS).addTranslation(capture())
-
-            assertThat(firstValue).isEqualTo(
-                Translation("That", "unknown!", DEFAULT_USER_ID, 0)
-            )
-        }
+        //verifyAll { translationDS.addTranslation(match { it.english == "This" }) }
+        verifyAll { translationDS.addTranslation(Translation("This", "unknown!", DEFAULT_USER_ID, 0)) }
     }
 }
