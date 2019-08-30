@@ -7,7 +7,8 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.faust.m.td.*
+import com.faust.m.td.R
+import com.faust.m.td.alertTranslation
 import com.faust.m.td.translation.Translation
 import com.faust.m.td.translation.TranslationDao
 import kotlinx.android.synthetic.main.activity_input.*
