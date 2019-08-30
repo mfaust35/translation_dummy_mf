@@ -6,28 +6,23 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.faust.m.td.R
-import com.faust.m.td.translation.TranslationRecyclerAdapter
-import com.faust.m.td.TranslationApplication
 import com.faust.m.td.alertTranslation
 import com.faust.m.td.translation.TranslationDao
+import com.faust.m.td.translation.TranslationRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_select.*
+import org.koin.android.ext.android.inject
 
 class SelectActivity: AppCompatActivity() {
 
-    private lateinit var translationDao: TranslationDao
+    private val translationDao: TranslationDao by inject()
     private lateinit var translationAdapter: TranslationRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select)
 
-        initTranslationDao()
         initAdapterTranslation()
         setupRecyclerView()
-    }
-
-    private fun initTranslationDao() {
-        translationDao = TranslationApplication.database!!.translationDao()
     }
     private fun initAdapterTranslation() {
         translationAdapter =

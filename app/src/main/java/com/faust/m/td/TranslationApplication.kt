@@ -1,19 +1,20 @@
 package com.faust.m.td
 
 import android.app.Application
-import androidx.room.Room
+import com.faust.m.td.koin.databaseModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
 
 class TranslationApplication : Application() {
 
-    companion object {
-        var database: TranslationDatabase? = null
-    }
-
     override fun onCreate() {
         super.onCreate()
-        TranslationApplication.database = Room.databaseBuilder(this,
-                TranslationDatabase::class.java,
-                "translations_path")
-            .build()
+
+        startKoin {
+            androidLogger()
+            androidContext(this@TranslationApplication)
+            modules(listOf(databaseModule))
+        }
     }
 }

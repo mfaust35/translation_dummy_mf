@@ -7,30 +7,25 @@ import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import com.faust.m.td.R
-import com.faust.m.td.TranslationApplication
-import com.faust.m.td.alertTranslation
+import com.faust.m.td.*
 import com.faust.m.td.translation.Translation
 import com.faust.m.td.translation.TranslationDao
 import kotlinx.android.synthetic.main.activity_input.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.info
+import org.koin.android.ext.android.inject
 
 class InputActivity: AppCompatActivity(), AnkoLogger {
 
-    private lateinit var translationDao: TranslationDao
+    private val translationDao: TranslationDao by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input)
 
-        initTranslationDao()
         setupTranslateAction()
         setupAddTranslationAction()
         setupCancelAction()
-    }
-    private fun initTranslationDao () {
-        translationDao = TranslationApplication.database!!.translationDao()
     }
     private fun setupTranslateAction() {
         sentence_edit_text.setOnEditorActionListener { textView, actionId, keyEvent ->
