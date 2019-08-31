@@ -1,0 +1,45 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "35ab3f7d148e27e373175e03ed8d8268",
+    "entities": [
+      {
+        "tableName": "translations",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`english` TEXT NOT NULL, `french` TEXT NOT NULL, `translation_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "english",
+            "columnName": "english",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "french",
+            "columnName": "french",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "id",
+            "columnName": "translation_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "columnNames": [
+            "translation_id"
+          ],
+          "autoGenerate": true
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, \"35ab3f7d148e27e373175e03ed8d8268\")"
+    ]
+  }
+}

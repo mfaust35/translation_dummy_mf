@@ -1,9 +1,6 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
-
 apply plugin: 'kotlin-kapt'
 
 android {
@@ -16,6 +13,11 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "com.faust.m.td.TestApplicationJUnitRunner"
+    }
+    kapt {
+        arguments {
+            arg("room.schemaLocation", "$projectDir/schemas".toString())
+        }
     }
     buildTypes {
         release {
