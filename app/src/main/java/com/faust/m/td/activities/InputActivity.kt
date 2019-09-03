@@ -1,21 +1,17 @@
 package com.faust.m.td.activities
 
-import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
-import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
-import android.view.inputmethod.InputMethodManager
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.faust.m.td.*
 import com.faust.m.td.translation.Translation
 import com.faust.m.td.translation.TranslationDao
 import kotlinx.android.synthetic.main.activity_input.*
-import org.jetbrains.anko.AnkoLogger
-import org.jetbrains.anko.info
 import org.koin.android.ext.android.inject
 
-class InputActivity: AppCompatActivity(), AnkoLogger {
+class InputActivity: AppCompatActivity() {
 
     private val translationDao: TranslationDao by inject()
 
@@ -23,57 +19,36 @@ class InputActivity: AppCompatActivity(), AnkoLogger {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_input)
 
-        setupTranslateAction()
-        setupAddTranslationAction()
-        setupCancelAction()
+        sentence_edit_text.setOnEditorActionListener(::onSentenceEtEA)
+        translate_button.setOnClickListener(::onTranslateBtnC)
+        add_translation_button.setOnClickListener(::onAddTranslationBtnC)
+        cancel_button.setOnClickListener(::onCancelBtnC)
     }
-    private fun setupTranslateAction() {
-        sentence_edit_text.setOnEditorActionListener { textView, actionId, keyEvent ->
-            var handled = false
-            if (isActionDone(actionId) || isEnterKeyDownEvent(keyEvent)) {
-                val sentence = textView.text.toString()
-                info { "sentence = \"$sentence\"" }
-                alertTranslation(sentence)
-                clearWindowForAlert()
-                handled = true
-            }
-            handled
-        }
 
-        translate_button.setOnClickListener {
-            val sentence = sentence_edit_text.text.toString()
-            alertTranslation(sentence)
-            clearWindowForAlert()
+    private fun onSentenceEtEA(textView: TextView, editorAction: EditorAction): Boolean {
+        if (editorAction.isDone()) {
+            alertTranslation(textView.text.toString())
+            clearSoftInputFocus(sentence_edit_text)
+            return true
+        }
+        return false
+    }
+
+    private fun onTranslateBtnC(v: View?) {
+        alertTranslation(sentence_edit_text.text.toString())
+        clearSoftInputFocus(sentence_edit_text)
+    }
+
+    private fun onAddTranslationBtnC(v: View) {
+        val sentence = sentence_edit_text.text.toString()
+        AsyncTask.execute {
+            translationDao.insertAll(Translation(sentence, "unknown!"))
+            runOnUiThread {
+                finish() }
         }
     }
-    private fun isActionDone(actionId: Int?): Boolean {
-        return EditorInfo.IME_ACTION_DONE == actionId
-    }
-    private fun isEnterKeyDownEvent(keyEvent: KeyEvent?): Boolean {
-        return KeyEvent.KEYCODE_ENTER == keyEvent?.keyCode && KeyEvent.ACTION_DOWN == keyEvent.action
-    }
-    private fun clearWindowForAlert() {
-        sentence_edit_text.clearFocus()
-        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.hideSoftInputFromWindow(sentence_edit_text.windowToken, 0)
-    }
-    private fun setupAddTranslationAction() {
-        add_button.setOnClickListener {
-            val sentence = sentence_edit_text.text.toString()
-            AsyncTask.execute {
-                insertSentenceToDatabase(sentence)
-                runOnUiThread {
-                    finish() }
-            }
-        }
-    }
-    private fun insertSentenceToDatabase(sentence: String) {
-        val unknownTranslation = Translation(sentence, "unknown!")
-        translationDao.insertAll(unknownTranslation)
-    }
-    private fun setupCancelAction() {
-        cancel_button.setOnClickListener {
-            finish()
-        }
+
+    private fun onCancelBtnC(v: View) {
+        finish()
     }
 }

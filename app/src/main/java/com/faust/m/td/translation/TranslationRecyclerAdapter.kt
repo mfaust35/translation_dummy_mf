@@ -8,12 +8,13 @@ import com.faust.m.td.R
 import com.faust.m.td.inflate
 import org.jetbrains.anko.find
 
-class TranslationRecyclerAdapter(translations: Collection<String>? = null) :
-     RecyclerView.Adapter<TranslationRecyclerAdapter.TranslationHolder>() {
+
+class TranslationRecyclerAdapter(translations: Collection<String>? = null,
+                                 var onItemClick: ((value: String) -> Unit)? = null):
+    RecyclerView.Adapter<TranslationRecyclerAdapter.TranslationHolder>() {
 
     private val mTranslations: MutableList<String> =
         if (translations.isNullOrEmpty()) mutableListOf() else ArrayList(translations)
-    var onItemClickListener: ((tSentence: String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TranslationHolder {
         val inflatedView = parent.inflate(R.layout.recycler_view_translation, false)
@@ -29,15 +30,20 @@ class TranslationRecyclerAdapter(translations: Collection<String>? = null) :
         holder.bindTranslation(translation)
     }
 
-    fun addAll(sentences: Collection<String>) {
+    private fun addAll(sentences: Collection<String>) {
         // TODO : I don't believe I can modify the list just like that
         // What happens in case the UI thread is currently trying to display the list?
         this.mTranslations.addAll(sentences)
     }
 
-    fun clear() {
+    private fun clear() {
         // TODO : cf TODO on addAll() method
         mTranslations.clear()
+    }
+
+    fun resetTranslationsTo(sentences: Collection<String>) {
+        clear()
+        addAll(sentences)
     }
 
     inner class TranslationHolder(private val view: View): RecyclerView.ViewHolder(view) {
@@ -61,7 +67,7 @@ class TranslationRecyclerAdapter(translations: Collection<String>? = null) :
             }
         }
         private fun registerOnClickListener(translation: String) {
-            view.setOnClickListener { onItemClickListener?.invoke(translation) }
+            view.setOnClickListener { onItemClick?.invoke(translation) }
         }
     }
 }

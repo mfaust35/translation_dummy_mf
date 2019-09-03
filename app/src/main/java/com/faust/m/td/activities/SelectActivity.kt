@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.faust.m.td.R
 import com.faust.m.td.alertTranslation
+import com.faust.m.td.translation.Translation
 import com.faust.m.td.translation.TranslationDao
 import com.faust.m.td.translation.TranslationRecyclerAdapter
 import kotlinx.android.synthetic.main.activity_select.*
@@ -21,41 +22,32 @@ class SelectActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_select)
 
-        initAdapterTranslation()
-        setupRecyclerView()
-    }
-    private fun initAdapterTranslation() {
-        translationAdapter =
-            TranslationRecyclerAdapter(emptyList())
-        translationAdapter.onItemClickListener = { tSentence: String ->
-            when(tSentence) {
-                getString(R.string.input_sentence) -> {
-                    val intent = Intent(this, InputActivity::class.java)
-                    startActivity(intent)
-                }
-                else -> alertTranslation(tSentence)
-            }
-        }
-    }
-    private fun setupRecyclerView() {
+        // Initialize adapter
+        translationAdapter = TranslationRecyclerAdapter(onItemClick = ::onTranslationClick)
+        // Setup recyclerView
         recyclerViewTranslation.layoutManager = LinearLayoutManager(this)
         recyclerViewTranslation.adapter = translationAdapter
+    }
+
+    private fun onTranslationClick(value: String) {
+        when(value) {
+            getString(R.string.input_sentence) -> {
+                val intent = Intent(this, InputActivity::class.java)
+                startActivity(intent)
+            }
+            else -> alertTranslation(value)
+        }
     }
 
     override fun onResume() {
         super.onResume()
         AsyncTask.execute {
-            val translations =
+            translationAdapter.resetTranslationsTo(
                 resources.getStringArray(R.array.sentences).toList() +
-                        translationDao.getAll().map { it.english }
-            translationAdapter.clear()
-            translationAdapter.addAll(translations)
-            notifyDataChanged()
-        }
-    }
-    private fun notifyDataChanged() {
-        runOnUiThread {
-            translationAdapter.notifyDataSetChanged()
+                        translationDao.getAll().map(Translation::english))
+            runOnUiThread {
+                translationAdapter.notifyDataSetChanged()
+            }
         }
     }
 }
