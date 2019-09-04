@@ -47,7 +47,7 @@ class InputActivityTest : KoinTest {
         doNothing().whenever(translationDao).insertAll(any())
 
         onView(withId(R.id.sentence_edit_text)).perform(replaceText(sentence))
-        onView(withId(R.id.add_button)).perform(click())
+        onView(withId(R.id.add_translation_button)).perform(click())
     }
 
     @Test
