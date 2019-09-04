@@ -4,7 +4,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.faust.m.td.R
 import com.faust.m.td.koin.KoinActivityTestRule
 import com.faust.m.td.translation.TranslationDao
@@ -17,7 +17,7 @@ import org.koin.test.KoinTest
 import org.mockito.Mockito.mock
 import kotlin.test.assertTrue
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class InputActivityTest : KoinTest {
 
     // Apparently, this  mock is being recreated for each test, so there should be no problems

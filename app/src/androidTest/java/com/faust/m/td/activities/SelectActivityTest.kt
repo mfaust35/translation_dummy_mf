@@ -8,7 +8,7 @@ import androidx.test.espresso.intent.Intents.intended
 import androidx.test.espresso.intent.matcher.IntentMatchers.hasComponent
 import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.faust.m.td.R
 import com.faust.m.td.koin.KoinIntentsTestRule
 import com.faust.m.td.translation.Translation
@@ -22,7 +22,7 @@ import org.koin.dsl.module
 import org.koin.test.KoinTest
 import org.mockito.Mockito.mock
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class SelectActivityTest : KoinTest {
 
     private var translationDao: TranslationDao = mock(TranslationDao::class.java)
