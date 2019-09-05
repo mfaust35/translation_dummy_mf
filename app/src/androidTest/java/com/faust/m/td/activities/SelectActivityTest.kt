@@ -14,6 +14,8 @@ import com.faust.m.td.koin.KoinIntentsTestRule
 import com.faust.m.td.translation.Translation
 import com.faust.m.td.translation.TranslationDao
 import com.faust.m.td.translation.TranslationRecyclerAdapter
+import com.faust.m.td.user.User
+import com.faust.m.td.user.UserDao
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Rule
 import org.junit.Test
@@ -25,15 +27,25 @@ import org.mockito.Mockito.mock
 @RunWith(AndroidJUnit4ClassRunner::class)
 class SelectActivityTest : KoinTest {
 
+    private val user = User("moi", 10)
+    private val translation = Translation("en", "fr", user.id)
+
     private var translationDao: TranslationDao = mock(TranslationDao::class.java)
+    private var userDao: UserDao = mock(UserDao::class.java)
 
     @get:Rule
     var intentsTestRule = KoinIntentsTestRule(
         SelectActivity::class.java,
-        module { single { translationDao } })
+        module {
+            single { translationDao }
+            single { userDao }
+        })
     // Add lambda to stub translationDao before activity is launched because
     // `getAll()` is called during onResume()
-    { whenever(translationDao.getAll()).thenReturn(listOf(Translation("en", "fr"))) }
+    {
+        whenever(translationDao.getAll()).thenReturn(listOf(translation))
+        whenever(userDao.getAll()).thenReturn(listOf(user))
+    }
 
 
     // TODO : these tests are leaking dialog window. I don't know why
