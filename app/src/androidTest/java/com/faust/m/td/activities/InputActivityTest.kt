@@ -4,11 +4,14 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.action.ViewActions.replaceText
 import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.runner.AndroidJUnit4
+import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
+import com.faust.m.td.DEFAULT_USER_ID
 import com.faust.m.td.R
 import com.faust.m.td.koin.KoinActivityTestRule
+import com.faust.m.td.translation.Translation
 import com.faust.m.td.translation.TranslationDao
 import com.nhaarman.mockitokotlin2.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -17,7 +20,7 @@ import org.koin.test.KoinTest
 import org.mockito.Mockito.mock
 import kotlin.test.assertTrue
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(AndroidJUnit4ClassRunner::class)
 class InputActivityTest : KoinTest {
 
     // Apparently, this  mock is being recreated for each test, so there should be no problems
@@ -39,7 +42,7 @@ class InputActivityTest : KoinTest {
 
     @Test
     fun clickOnButtonAddShouldFinishActivity() {
-        clickOnButtonAddAfterInputSentence("That")
+        clickOnButtonAddAfterInputSentence("This")
 
         assertTrue(activityTestRule.activity.isFinishing)
     }
@@ -50,10 +53,18 @@ class InputActivityTest : KoinTest {
         onView(withId(R.id.add_translation_button)).perform(click())
     }
 
+
     @Test
     fun clickOnButtonAddShouldInsertTranslationIntoDao() {
+        // Given sentence_edit_text contain text "That"
+        // When click on button add
         clickOnButtonAddAfterInputSentence("That")
 
-        verify(translationDao).insertAll(argThat { english == "That" })
+        // Then translationDao insert a new translation with correct attributes
+        argumentCaptor<Translation>().apply {
+            verify(translationDao).insertAll(capture())
+            assertThat(firstValue)
+                .isEqualTo(Translation("That", "unknown!", DEFAULT_USER_ID, 0))
+        }
     }
 }

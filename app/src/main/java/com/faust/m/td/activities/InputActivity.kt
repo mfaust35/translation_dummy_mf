@@ -42,7 +42,9 @@ class InputActivity: AppCompatActivity() {
     private fun onAddTranslationBtnC(v: View) {
         val sentence = sentence_edit_text.text.toString()
         AsyncTask.execute {
-            translationDao.insertAll(Translation(sentence, "unknown!"))
+            // TODO replace user_id by real user id when feature choose use is created
+            // For now, use DEFAULT_USER_ID
+            translationDao.insertAll(Translation(sentence, "unknown!", DEFAULT_USER_ID))
             runOnUiThread {
                 finish() }
         }
