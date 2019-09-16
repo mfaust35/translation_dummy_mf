@@ -36,7 +36,5 @@ class EditorAction(private val actionId: Int, private val keyEvent: KeyEvent) {
     fun isEnterKeyDownEvent() =
         KeyEvent.KEYCODE_ENTER == keyEvent.keyCode && KeyEvent.ACTION_DOWN == keyEvent.action
 
-    fun isDone(): Boolean {
-        return isActionDone() || isEnterKeyDownEvent()
-    }
+    fun isDone(): Boolean = isActionDone() || isEnterKeyDownEvent()
 }

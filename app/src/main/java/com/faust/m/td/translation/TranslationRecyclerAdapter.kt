@@ -21,9 +21,7 @@ class TranslationRecyclerAdapter(translations: Collection<String>? = null,
         return TranslationHolder(inflatedView)
     }
 
-    override fun getItemCount(): Int {
-        return mTranslations.size
-    }
+    override fun getItemCount(): Int = mTranslations.size
 
     override fun onBindViewHolder(holder: TranslationHolder, position: Int) {
         val translation = mTranslations[position]
