@@ -8,7 +8,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.faust.m.td"
-        minSdkVersion 15
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -40,6 +40,10 @@ dependencies {
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
     implementation "org.koin:koin-android:$koin_version"
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    //kapt "androidx.lifecycle:lifecycle-compiler:$lifecycle_version"
+    // alternately - if using Java8, use the following instead of lifecycle-compiler
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
 
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
 
@@ -62,6 +66,14 @@ dependencies {
             {exclude group: "org.mockito"}
     androidTestImplementation "org.mockito:mockito-android:2.24.5" // used w/ koin-test
     androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0" // used w/ koin-test
+
+    /*
+    // optional - ReactiveStreams support for LiveData
+    implementation "androidx.lifecycle:lifecycle-reactivestreams:$lifecycle_version" // For Kotlin use lifecycle-reactivestreams-ktx
+
+    // optional - Test helpers for LiveData
+    testImplementation "androidx.arch.core:core-testing:$lifecycle_version"
+     */
 }
 
 repositories {
