@@ -1,5 +1,6 @@
 package com.faust.m.td.translation
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import com.faust.m.td.database.BaseDao
@@ -8,8 +9,8 @@ import com.faust.m.td.database.BaseDao
 interface TranslationDao: BaseDao<Translation> {
 
     @Query("SELECT * FROM translations")
-    fun getAll(): List<Translation>
+    fun getAll(): LiveData<List<Translation>>
 
     @Query("SELECT * FROM translations WHERE user_id = :userId")
-    fun getAllForUser(userId: Long): List<Translation>
+    fun getAllForUser(userId: Long): LiveData<List<Translation>>
 }
