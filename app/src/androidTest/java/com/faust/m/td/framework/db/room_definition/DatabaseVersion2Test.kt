@@ -1,5 +1,6 @@
 package com.faust.m.td.framework.db.room_definition
 
+import android.database.Cursor
 import androidx.room.testing.MigrationTestHelper
 import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
@@ -9,18 +10,17 @@ import com.faust.m.td.framework.db.room_definition.model.TranslationEntity
 import com.faust.m.td.framework.db.room_definition.model.UserEntity
 import com.faust.m.td.framework.db.room_definition.model.getLongFrom
 import com.faust.m.td.framework.db.room_definition.model.getStringFrom
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.test.assertEquals
 
 private const val TEST_DB_NAME = "migration-test"
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class DatabaseVersion2Test {
 
-    private val defaultUsername = "mldie35"
-    private val defaultUserId = DEFAULT_USER_ID
+    private val defaultUserEntity = UserEntity("mldie35", DEFAULT_USER_ID)
 
     @get:Rule
     val migrationTestHelper = MigrationTestHelper(
@@ -49,17 +49,13 @@ class DatabaseVersion2Test {
 
         // The translation has been migrated and contain the DEFAULT_USER_ID
         db.query("SELECT * FROM translations").apply {
-            assertEquals(1, count, "There should be only one row in database")
+            assertThatRowNumberIsEqualTo(1)
             moveToFirst()
-            assertEquals(
-                TranslationEntity("hello", "bonjour", DEFAULT_USER_ID, 10),
-                TranslationEntity(
-                    getStringFrom("english"),
-                    getStringFrom("french"),
-                    getLongFrom("user_id"),
-                    getLongFrom("translation_id")
+            assertThat(this.toTranslationEntity())
+                .`as`("TranslationEntity from cursor")
+                .isEqualTo(
+                    TranslationEntity("hello", "bonjour", DEFAULT_USER_ID, 10)
                 )
-            )
         }
     }
 
@@ -75,15 +71,11 @@ class DatabaseVersion2Test {
 
         // The table user contain 1 user with default values
         db.query("SELECT * FROM users").apply {
-            assertEquals(1, count, "There should be only one user in the database")
+            assertThatRowNumberIsEqualTo(1)
             moveToFirst()
-            assertEquals(
-                UserEntity(defaultUsername, defaultUserId),
-                UserEntity(
-                    getStringFrom("username"),
-                    getLongFrom("user_id")
-                )
-            )
+            assertThat(this.toUserEntity())
+                .`as`("UserEntity from cursor")
+                .isEqualTo(defaultUserEntity)
         }
     }
 
@@ -95,15 +87,28 @@ class DatabaseVersion2Test {
 
         // The default user can be retrieve
         db.query("SELECT * FROM users").apply {
-            assertEquals(1, count, "There should be only one user in the database")
+            assertThatRowNumberIsEqualTo(1)
             moveToFirst()
-            assertEquals(
-                UserEntity(defaultUsername, defaultUserId),
-                UserEntity(
-                    getStringFrom("username"),
-                    getLongFrom("user_id")
-                )
-            )
+            assertThat(this.toUserEntity())
+                .`as`("UserEntity from cursor")
+                .isEqualTo(defaultUserEntity)
         }
     }
+
+
+    private fun Cursor.assertThatRowNumberIsEqualTo(expected: Int) {
+        assertThat(count).`as`("Number of rows in cursor").isEqualTo(expected)
+    }
+
+    private fun Cursor.toTranslationEntity(): TranslationEntity = TranslationEntity(
+        getStringFrom("english"),
+        getStringFrom("french"),
+        getLongFrom("user_id"),
+        getLongFrom("translation_id")
+    )
+
+    private fun Cursor.toUserEntity(): UserEntity = UserEntity(
+        getStringFrom("username"),
+        getLongFrom("user_id")
+    )
 }

@@ -2,10 +2,9 @@ package com.faust.m.td.framework.db.room_definition.model
 
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.faust.m.td.framework.db.room_definition.RoomTranslationDatabase
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class UserDaoTest: BaseDaoTest() {
@@ -23,9 +22,8 @@ class UserDaoTest: BaseDaoTest() {
         userDao.insertAll(user)
 
         // The user can be retrieved
-        val dbUser = userDao.get(user.id)
-        assertNotNull(dbUser)
-        assertEquals(dbUser.username, user.username)
-        assertEquals(dbUser.id, user.id)
+        userDao.get(user.id).apply {
+            assertThat(this).`as`("User from db").isEqualTo(user)
+        }
     }
 }
