@@ -8,8 +8,9 @@ import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.faust.m.td.DEFAULT_USER_ID
 import com.faust.m.td.R
 import com.faust.m.td.koin.KoinActivityTestRule
-import com.faust.m.td.translation.Translation
-import com.faust.m.td.translation.TranslationDao
+import com.faust.m.td.framework.db.TranslationEntity
+import com.faust.m.td.framework.db.TranslationDao
+import com.faust.m.td.presentation.input.InputActivity
 import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Rule
@@ -61,10 +62,17 @@ class InputActivityTest : KoinTest {
         clickOnButtonAddAfterInputSentence("That")
 
         // Then translationDao insert a new translation with correct attributes
-        argumentCaptor<Translation>().apply {
+        argumentCaptor<TranslationEntity>().apply {
             verify(translationDao).insertAll(capture())
             assertThat(firstValue)
-                .isEqualTo(Translation("That", "unknown!", DEFAULT_USER_ID, 0))
+                .isEqualTo(
+                    TranslationEntity(
+                        "That",
+                        "unknown!",
+                        DEFAULT_USER_ID,
+                        0
+                    )
+                )
         }
     }
 }

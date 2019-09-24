@@ -5,8 +5,11 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import androidx.test.platform.app.InstrumentationRegistry
 import com.faust.m.td.DEFAULT_USER_ID
-import com.faust.m.td.translation.Translation
-import com.faust.m.td.user.User
+import com.faust.m.td.framework.MIGRATION_1_2
+import com.faust.m.td.framework.PREPOPULATE_V2
+import com.faust.m.td.framework.RoomTranslationDatabase
+import com.faust.m.td.framework.db.TranslationEntity
+import com.faust.m.td.framework.db.UserEntity
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -23,13 +26,13 @@ class DatabaseVersion2Test {
     @get:Rule
     val migrationTestHelper = MigrationTestHelper(
         InstrumentationRegistry.getInstrumentation(),
-        TranslationDatabase::class.java.canonicalName,
+        RoomTranslationDatabase::class.java.canonicalName,
         FrameworkSQLiteOpenHelperFactory())
 
     @get:Rule
     val creationTestHelper = CreationTestHelper(
         InstrumentationRegistry.getInstrumentation(),
-        TranslationDatabase::class.java.canonicalName,
+        RoomTranslationDatabase::class.java.canonicalName,
         FrameworkSQLiteOpenHelperFactory())
 
     @Test
@@ -49,12 +52,13 @@ class DatabaseVersion2Test {
             assertEquals(1, count, "There should be only one row in database")
             moveToFirst()
             assertEquals(
-                Translation("hello", "bonjour", DEFAULT_USER_ID, 10),
-                Translation(
+                TranslationEntity("hello", "bonjour", DEFAULT_USER_ID, 10),
+                TranslationEntity(
                     getStringFrom("english"),
                     getStringFrom("french"),
                     getLongFrom("user_id"),
-                    getLongFrom("translation_id"))
+                    getLongFrom("translation_id")
+                )
             )
         }
     }
@@ -74,8 +78,8 @@ class DatabaseVersion2Test {
             assertEquals(1, count, "There should be only one user in the database")
             moveToFirst()
             assertEquals(
-                User(defaultUsername, defaultUserId),
-                User(getStringFrom("username"), getLongFrom("user_id"))
+                UserEntity(defaultUsername, defaultUserId),
+                UserEntity(getStringFrom("username"), getLongFrom("user_id"))
             )
         }
     }
@@ -91,8 +95,8 @@ class DatabaseVersion2Test {
             assertEquals(1, count, "There should be only one user in the database")
             moveToFirst()
             assertEquals(
-                User(defaultUsername, defaultUserId),
-                User(getStringFrom("username"), getLongFrom("user_id"))
+                UserEntity(defaultUsername, defaultUserId),
+                UserEntity(getStringFrom("username"), getLongFrom("user_id"))
             )
         }
     }

@@ -1,6 +1,9 @@
-package com.faust.m.td
+package com.faust.m.td.presentation
 
 import androidx.appcompat.app.AppCompatActivity
+import com.faust.m.td.R
+import com.faust.m.td.Translator
+import com.faust.m.td.TranslatorException
 import org.jetbrains.anko.alert
 import org.jetbrains.anko.toast
 

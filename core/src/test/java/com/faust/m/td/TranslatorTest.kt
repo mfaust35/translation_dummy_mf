@@ -1,7 +1,8 @@
 package com.faust.m.td
 
 import org.junit.Test
-import kotlin.test.*
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
 
 class TranslatorTest {
 

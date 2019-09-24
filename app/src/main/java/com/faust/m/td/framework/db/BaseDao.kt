@@ -1,4 +1,4 @@
-package com.faust.m.td.database
+package com.faust.m.td.framework.db
 
 import androidx.room.Dao
 import androidx.room.Insert

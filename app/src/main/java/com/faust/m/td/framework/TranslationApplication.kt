@@ -1,7 +1,8 @@
-package com.faust.m.td
+package com.faust.m.td.framework
 
 import android.app.Application
-import com.faust.m.td.koin.databaseModule
+import com.faust.m.td.framework.databaseModule
+import com.faust.m.td.framework.repositoryModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
@@ -14,7 +15,7 @@ class TranslationApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@TranslationApplication)
-            modules(listOf(databaseModule))
+            modules(listOf(databaseModule, repositoryModule))
         }
     }
 }

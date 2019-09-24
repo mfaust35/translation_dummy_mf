@@ -1,11 +1,11 @@
-package com.faust.m.td.translation
+package com.faust.m.td.presentation.select
 
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.faust.m.td.R
-import com.faust.m.td.inflate
+import com.faust.m.td.presentation.inflate
 import org.jetbrains.anko.find
 
 
