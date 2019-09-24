@@ -5,7 +5,6 @@ import com.faust.m.td.framework.db.room_definition.RoomTranslationDatabase
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith
-import kotlin.test.assertEquals
 
 @RunWith(AndroidJUnit4ClassRunner::class)
 class TranslationDaoTest: BaseDaoTest() {
@@ -31,7 +30,7 @@ class TranslationDaoTest: BaseDaoTest() {
 
         // The translation can be retrieved
         translationDao.getAll().apply {
-            assertEquals(1, size, "There should be only 1 translation in database")
+            assertThat(size).isEqualTo(1)
             assertThat(first()).isEqualTo(translation)
         }
     }
