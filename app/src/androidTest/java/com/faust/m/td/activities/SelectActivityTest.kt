@@ -10,12 +10,11 @@ import androidx.test.espresso.matcher.RootMatchers.isDialog
 import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.internal.runner.junit4.AndroidJUnit4ClassRunner
 import com.faust.m.td.R
-import com.faust.m.td.koin.KoinIntentsTestRule
-import com.faust.m.td.translation.Translation
-import com.faust.m.td.translation.TranslationDao
-import com.faust.m.td.translation.TranslationRecyclerAdapter
-import com.faust.m.td.user.User
-import com.faust.m.td.user.UserDao
+import com.faust.m.td.data.TranslationDataSource
+import com.faust.m.td.data.UserDataSource
+import com.faust.m.td.domain.Translation
+import com.faust.m.td.domain.User
+import com.faust.m.td.translation.TranslationRecyclerAdapter.TranslationHolder
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.Rule
 import org.junit.Test
@@ -30,21 +29,21 @@ class SelectActivityTest : KoinTest {
     private val user = User("moi", 10)
     private val translation = Translation("en", "fr", user.id)
 
-    private var translationDao: TranslationDao = mock(TranslationDao::class.java)
-    private var userDao: UserDao = mock(UserDao::class.java)
+    private var translationDS: TranslationDataSource = mock(TranslationDataSource::class.java)
+    private var userDS: UserDataSource = mock(UserDataSource::class.java)
 
     @get:Rule
     var intentsTestRule = KoinIntentsTestRule(
         SelectActivity::class.java,
         module {
-            single { translationDao }
-            single { userDao }
+            single { translationDS }
+            single { userDS }
         })
-    // Add lambda to stub translationDao before activity is launched because
-    // `getAll()` is called during onResume()
     {
-        whenever(translationDao.getAll()).thenReturn(listOf(translation))
-        whenever(userDao.getAll()).thenReturn(listOf(user))
+        // Add lambda to stub translationDS before activity is launched because
+        // `getAll()` is called during onResume()
+        whenever(translationDS.getAllTranslations()).thenReturn(listOf(translation))
+        whenever(userDS.getAllUsers()).thenReturn(listOf(user))
     }
 
 
@@ -64,7 +63,7 @@ class SelectActivityTest : KoinTest {
     private fun clickItemOnListAtPosition(pPosition: Int) {
         // Click on the RecyclerView item at position 2
         onView(withId(R.id.recyclerViewTranslation))
-            .perform(actionOnItemAtPosition<TranslationRecyclerAdapter.TranslationHolder>(pPosition, click()))
+            .perform(actionOnItemAtPosition<TranslationHolder>(pPosition, click()))
     }
 
     @Test

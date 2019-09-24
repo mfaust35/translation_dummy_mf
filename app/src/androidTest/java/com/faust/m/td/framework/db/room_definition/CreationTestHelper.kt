@@ -1,4 +1,4 @@
-package com.faust.m.td.database
+package com.faust.m.td.framework.db.room_definition
 
 import android.app.Instrumentation
 import android.util.Log

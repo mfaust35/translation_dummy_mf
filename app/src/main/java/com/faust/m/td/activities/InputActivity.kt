@@ -6,14 +6,14 @@ import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.faust.m.td.*
-import com.faust.m.td.translation.Translation
-import com.faust.m.td.translation.TranslationDao
+import com.faust.m.td.data.TranslationDataSource
+import com.faust.m.td.domain.Translation
 import kotlinx.android.synthetic.main.activity_input.*
 import org.koin.android.ext.android.inject
 
 class InputActivity: AppCompatActivity() {
 
-    private val translationDao: TranslationDao by inject()
+    private val translationDS: TranslationDataSource by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class InputActivity: AppCompatActivity() {
         AsyncTask.execute {
             // TODO replace user_id by real user id when feature choose use is created
             // For now, use DEFAULT_USER_ID
-            translationDao.insertAll(Translation(sentence, "unknown!", DEFAULT_USER_ID))
+            translationDS.addTranslation(Translation(sentence, "unknown!", DEFAULT_USER_ID))
             runOnUiThread {
                 finish() }
         }

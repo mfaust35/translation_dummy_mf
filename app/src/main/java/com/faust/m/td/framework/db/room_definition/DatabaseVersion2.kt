@@ -1,12 +1,12 @@
-package com.faust.m.td.database
+package com.faust.m.td.framework.db.room_definition
 
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.faust.m.td.DEFAULT_USER_ID
-import com.faust.m.td.user.User
+import com.faust.m.td.framework.db.room_definition.model.UserEntity
 
-private val DEFAULT_USER_V2 = User("mldie35", DEFAULT_USER_ID)
+private val DEFAULT_USER_V2 = UserEntity("mldie35", DEFAULT_USER_ID)
 
 private fun prepopulateDatabaseVersion2(database: SupportSQLiteDatabase) {
     // Insert default user
@@ -29,10 +29,10 @@ val PREPOPULATE_V2 = object : RoomDatabase.Callback() {
 
 /**
  * Migrate from:
- * version 1 - have table {@link Translation}
+ * version 1 - have table {@link TranslationEntity}
  * to
- * version 2 - add a table {@link User} with a default user and add foreign key into table
- * {@link Translation} referencing the {@link User#id}
+ * version 2 - add a table {@link UserEntity} with a default user and add foreign key into table
+ * {@link TranslationEntity} referencing the {@link UserEntity#id}
  */
 val MIGRATION_1_2 = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
