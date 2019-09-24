@@ -1,7 +1,6 @@
-package com.faust.m.td
+package com.faust.m.td.framework
 
 import android.app.Application
-import com.faust.m.td.koin.databaseModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin

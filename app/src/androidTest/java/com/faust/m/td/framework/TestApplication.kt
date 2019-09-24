@@ -1,4 +1,4 @@
-package com.faust.m.td
+package com.faust.m.td.framework
 
 import android.app.Application
 import android.content.Context
